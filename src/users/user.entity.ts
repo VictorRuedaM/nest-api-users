@@ -6,6 +6,8 @@ export class User {
   id: number;
   @Column({ unique: true })
   userName: string;
+  @Column()
+  password: string;
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createAt: Date;
   @Column({ nullable: true })
