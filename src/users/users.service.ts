@@ -8,6 +8,10 @@ export class UsersService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
+  getUsers(): Promise<User[]> {
+    return this.userRepository.find();
+  }
+
   createUser(user: CreateUserDto) {
     const newUser = this.userRepository.create(user);
     this.userRepository.save(newUser);
