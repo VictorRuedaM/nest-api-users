@@ -17,15 +17,15 @@ import { UpdateUserDto } from './dto/update.user.dto';
 export class UsersController {
   constructor(private userService: UsersService) {}
   @Get(':id')
-  getUserById(@Param('id', ParseIntPipe) id: number): Promise<User> {
+  getUserById(@Param('id', ParseIntPipe) id: number) {
     return this.userService.getUserByID(id);
   }
   @Get('/name/:name')
-  getUserBiName(@Param('name') name: string): Promise<User> {
+  getUserBiName(@Param('name') name: string) {
     return this.userService.getUserByName(name);
   }
   @Get()
-  getUsers(): Promise<User[]> {
+  getUsers() {
     return this.userService.getUsers();
   }
   @Post()
