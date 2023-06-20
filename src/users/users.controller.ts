@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -28,5 +29,9 @@ export class UsersController {
   @Post()
   createUser(@Body() newUser: CreateUserDto) {
     return this.userService.createUser(newUser);
+  }
+  @Delete(':id')
+  deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.deleteUser(id);
   }
 }

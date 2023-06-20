@@ -30,4 +30,13 @@ export class UsersService {
     const newUser = this.userRepository.create(user);
     this.userRepository.save(newUser);
   }
+
+  async deleteUser(id: number) {
+    const userDeleted = await this.userRepository.delete({ id });
+    if (userDeleted.affected === 1) {
+      return 'User deleted successfully';
+    } else {
+      return 'User does not exist in DB';
+    }
+  }
 }
