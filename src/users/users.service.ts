@@ -4,10 +4,14 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { CreateProfileDto } from './dto/create.profile.dto';
+import { Profile } from './profile.entity';
 
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Profile)
+    private profileRepository: Repository<Profile>,
   ) {}
   async getUserByID(id: number) {
     const user = await this.userRepository.findOne({
@@ -33,7 +37,9 @@ export class UsersService {
   }
 
   async getUsers() {
-    const users = await this.userRepository.find();
+    const users = await this.userRepository.find({
+      relations: ['profile'],
+    });
     if (!users.length) {
       throw new HttpException(
         'Users Not Found in the DataBase',
@@ -44,7 +50,11 @@ export class UsersService {
   }
 
   async createUser(user: CreateUserDto) {
-    const userFound = await this.getUserByName(user.userName);
+    const userFound = await this.userRepository.findOne({
+      where: {
+        userName: user.userName,
+      },
+    });
     if (userFound) {
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
@@ -73,5 +83,25 @@ export class UsersService {
       );
     }
     return 'User updated successfully';
+  }
+
+  async createProfile(id: number, profile: CreateProfileDto) {
+    const user = await this.userRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['profile'],
+    });
+    if (user.profile !== null) {
+      throw new HttpException(
+        'The user already has a profile',
+        HttpStatus.CONFLICT,
+      );
+    }
+    const newProfile = this.profileRepository.create(profile);
+    const saveProfile = await this.profileRepository.save(newProfile);
+    user.profile = saveProfile;
+    const userProfile = await this.userRepository.save(user);
+    return userProfile;
   }
 }
