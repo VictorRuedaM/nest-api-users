@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UsersService } from './users.service';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update.user.dto';
 import { CreateProfileDto } from './dto/create.profile.dto';
 

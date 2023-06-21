@@ -1,11 +1,11 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { CreateProfileDto } from './dto/create.profile.dto';
-import { Profile } from './profile.entity';
+import { Profile } from './entities/profile.entity';
 
 export class UsersService {
   constructor(
@@ -18,6 +18,7 @@ export class UsersService {
       where: {
         id,
       },
+      relations: ['profile', 'posts'],
     });
     if (!user) {
       throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
@@ -29,6 +30,7 @@ export class UsersService {
       where: {
         userName: name,
       },
+      relations: ['profile', 'posts'],
     });
     if (!user) {
       throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
@@ -38,7 +40,7 @@ export class UsersService {
 
   async getUsers() {
     const users = await this.userRepository.find({
-      relations: ['profile'],
+      relations: ['profile', 'posts'],
     });
     if (!users.length) {
       throw new HttpException(
