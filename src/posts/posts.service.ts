@@ -12,10 +12,10 @@ export class PostsService {
     @InjectRepository(Post) private postRepository: Repository<Post>,
     private userService: UsersService,
   ) {}
-  async createPost(post: CreatePostDto) {
+  async createPost(createPost: CreatePostDto) {
     try {
-      await this.userService.getUserByID(post.authorId);
-      const newPost = this.postRepository.create(post);
+      await this.userService.getUserByID(createPost.authorId);
+      const newPost = this.postRepository.create(createPost);
       const postSave = await this.postRepository.save(newPost);
       return postSave;
     } catch (error) {

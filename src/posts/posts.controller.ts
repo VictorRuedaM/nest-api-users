@@ -17,8 +17,8 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  createPost(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.createPost(createPostDto);
+  createPost(@Body() createPost: CreatePostDto) {
+    return this.postsService.createPost(createPost);
   }
 
   @Get()
